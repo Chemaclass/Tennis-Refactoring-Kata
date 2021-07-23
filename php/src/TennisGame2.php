@@ -18,7 +18,7 @@ class TennisGame2 implements TennisGame
         $this->player2Name = $player2Name;
     }
 
-    public function getScore()
+    public function getScore(): string
     {
         $score = "";
         if ($this->P1point == $this->P2point && $this->P1point < 4) {
@@ -142,7 +142,7 @@ class TennisGame2 implements TennisGame
         $this->P2point++;
     }
 
-    public function wonPoint($player)
+    public function wonPoint($player): void
     {
         if ($player == "player1") {
             $this->P1Score();
