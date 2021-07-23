@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace TennisGame;
 
@@ -55,43 +55,23 @@ final class TennisGame1 implements TennisGame
     {
         $minusResult = $this->player1Score - $this->player2Score;
         if ($minusResult === 1) {
-            $score = "Advantage {$this->player1Name}";
-        } elseif ($minusResult === -1) {
-            $score = "Advantage {$this->player2Name}";
-        } elseif ($minusResult >= 2) {
-            $score = "Win for {$this->player1Name}";
-        } else {
-            $score = "Win for {$this->player2Name}";
+            return "Advantage {$this->player1Name}";
         }
-        return $score;
+
+        if ($minusResult === -1) {
+            return "Advantage {$this->player2Name}";
+        }
+
+        if ($minusResult >= 2) {
+            return "Win for {$this->player1Name}";
+        }
+
+        return "Win for {$this->player2Name}";
     }
 
     private function getDefaultScore(): string
     {
-        $score = '';
-        for ($i = 1; $i < 3; $i++) {
-            if ($i === 1) {
-                $tempScore = $this->player1Score;
-            } else {
-                $score .= "-";
-                $tempScore = $this->player2Score;
-            }
-            switch ($tempScore) {
-                case 0:
-                    $score .= "Love";
-                    break;
-                case 1:
-                    $score .= "Fifteen";
-                    break;
-                case 2:
-                    $score .= "Thirty";
-                    break;
-                case 3:
-                    $score .= "Forty";
-                    break;
-            }
-        }
-        return $score;
+        return $this->getScoreCall($this->player1Score) . '-' . $this->getScoreCall($this->player2Score);
     }
 
     private function isGamePoint(): bool
@@ -102,5 +82,15 @@ final class TennisGame1 implements TennisGame
     private function isDrawScore(): bool
     {
         return $this->player1Score === $this->player2Score;
+    }
+
+    private function getScoreCall(int $tempScore): string
+    {
+        return match ($tempScore) {
+            0 => "Love",
+            1 => "Fifteen",
+            2 => "Thirty",
+            3 => "Forty",
+        };
     }
 }
