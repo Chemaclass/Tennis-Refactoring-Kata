@@ -7,6 +7,13 @@ namespace TennisGame;
 final class TennisGame1 implements TennisGame
 {
     const GAME_POINT = 4;
+    const SCORE_CALL = [
+        0 => "Love",
+        1 => "Fifteen",
+        2 => "Thirty",
+        3 => "Forty",
+    ];
+
     private int $player1Score = 0;
     private int $player2Score = 0;
     private string $player1Name;
@@ -53,20 +60,13 @@ final class TennisGame1 implements TennisGame
 
     private function getGameScore(): string
     {
-        $minusResult = $this->player1Score - $this->player2Score;
-        if ($minusResult === 1) {
-            return "Advantage {$this->player1Name}";
-        }
+        $winningPlayer = $this->getWinningPlayerName();
+        $scoreDiff = abs($this->player1Score - $this->player2Score);
 
-        if ($minusResult === -1) {
-            return "Advantage {$this->player2Name}";
+        if ($scoreDiff === 1) {
+            return "Advantage {$winningPlayer}";
         }
-
-        if ($minusResult >= 2) {
-            return "Win for {$this->player1Name}";
-        }
-
-        return "Win for {$this->player2Name}";
+        return "Win for {$winningPlayer}";
     }
 
     private function getDefaultScore(): string
@@ -84,13 +84,13 @@ final class TennisGame1 implements TennisGame
         return $this->player1Score === $this->player2Score;
     }
 
-    private function getScoreCall(int $tempScore): string
+    private function getScoreCall(int $score): string
     {
-        return match ($tempScore) {
-            0 => "Love",
-            1 => "Fifteen",
-            2 => "Thirty",
-            3 => "Forty",
-        };
+        return self::SCORE_CALL[$score];
+    }
+
+    private function getWinningPlayerName(): string
+    {
+        return $this->player1Score > $this->player2Score ? $this->player1Name : $this->player2Name;
     }
 }
