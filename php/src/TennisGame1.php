@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace TennisGame;
 
-class TennisGame1 implements TennisGame
+final class TennisGame1 implements TennisGame
 {
+    const GAME_POINT = 4;
     private int $player1Score = 0;
     private int $player2Score = 0;
     private string $player1Name;
@@ -27,12 +30,12 @@ class TennisGame1 implements TennisGame
 
     public function getScore(): string
     {
-        if ($this->player1Score === $this->player2Score) {
+        if ($this->isDrawScore()) {
             return $this->getDrawScore();
         }
 
-        if ($this->player1Score >= 4 || $this->player2Score >= 4) {
-            return $this->getFinalScore();
+        if ($this->isGamePoint()) {
+            return $this->getGameScore();
         }
 
         return $this->getDefaultScore();
@@ -40,16 +43,15 @@ class TennisGame1 implements TennisGame
 
     private function getDrawScore(): string
     {
-        $score = match ($this->player1Score) {
+        return match ($this->player1Score) {
             0 => "Love-All",
             1 => "Fifteen-All",
             2 => "Thirty-All",
             default => "Deuce",
         };
-        return $score;
     }
 
-    private function getFinalScore(): string
+    private function getGameScore(): string
     {
         $minusResult = $this->player1Score - $this->player2Score;
         if ($minusResult === 1) {
@@ -90,5 +92,15 @@ class TennisGame1 implements TennisGame
             }
         }
         return $score;
+    }
+
+    private function isGamePoint(): bool
+    {
+        return $this->player1Score >= self::GAME_POINT || $this->player2Score >= self::GAME_POINT;
+    }
+
+    private function isDrawScore(): bool
+    {
+        return $this->player1Score === $this->player2Score;
     }
 }
